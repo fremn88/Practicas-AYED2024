@@ -1,5 +1,7 @@
 package tp2.ej1;
 
+import tp1.ej8.*;
+
 public class BinaryTree <T> {
 	
 	private T data;
@@ -110,7 +112,37 @@ public class BinaryTree <T> {
     }
 
 	// 0<=n<=m
+	@SuppressWarnings("unchecked")
 	public void entreNiveles(int n, int m){
+		Queue<BinaryTree<Integer>> cola = new Queue<BinaryTree<Integer>>();
+		cola.enqueue((BinaryTree<Integer>) this); //???? por que si es el metodo enqueue de "queue" acepta dato generico T, me alerta al colocar this ???? porque la variable de instancia es generica, no es BT
+		cola.enqueue(null);
+		int nivel = 1;
+		System.out.print("[ ");
+		while(!cola.isEmpty()&&nivel<=m) {
+			BinaryTree<Integer> aux = cola.dequeue();
+			if(aux!=null) {
+				if(nivel>=n) {
+					System.out.print(aux.getData()+" ");
+				}
+				if(aux.hasLeftChild()) {
+					cola.enqueue(aux.getLeftChild());
+				}
+				if(aux.hasRightChild()) {
+					cola.enqueue(aux.getRightChild());
+				}
+			} else {
+				if(!cola.isEmpty()) {
+					cola.enqueue(null);
+					if(nivel>=n&&nivel<m) {
+						System.out.print("] [ ");
+					}
+				}
+				nivel++;
+			}
+			
+		}
+		System.out.print("]");
 		
    }
 
