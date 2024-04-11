@@ -144,8 +144,34 @@ public class BinaryTree <T> {
 		}
 		System.out.print("]");
 		
-   }
-
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void imprimirNiveles() {
+		Queue<BinaryTree<Integer>> cola = new Queue<BinaryTree<Integer>>();
+		cola.enqueue((BinaryTree<Integer>) this); //???? por que si es el metodo enqueue de "queue" acepta dato generico T, me alerta al colocar this ???? porque la variable de instancia es generica, no es BT
+		cola.enqueue(null);
+		System.out.print("[ ");
+		while(!cola.isEmpty()) {
+			BinaryTree<Integer> aux = cola.dequeue();
+			if(aux!=null) {
+				System.out.print(aux.getData()+" ");
+				if(aux.hasLeftChild()) {
+					cola.enqueue(aux.getLeftChild());
+				}
+				if(aux.hasRightChild()) {
+					cola.enqueue(aux.getRightChild());
+				}
+			} else {
+				if(!cola.isEmpty()) {
+					cola.enqueue(null);
+					System.out.print("] [ ");
+					}
+				}
+			}
+		System.out.print("]");
+	}
+	
 	public void imptimirInorder() {
 		if(this.hasLeftChild()) {
 			this.getLeftChild().imptimirInorder();
