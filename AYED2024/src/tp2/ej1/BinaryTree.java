@@ -112,15 +112,14 @@ public class BinaryTree <T> {
     }
 
 	// 0<=n<=m
-	@SuppressWarnings("unchecked")
 	public void entreNiveles(int n, int m){
-		Queue<BinaryTree<Integer>> cola = new Queue<BinaryTree<Integer>>();
-		cola.enqueue((BinaryTree<Integer>) this); //???? por que si es el metodo enqueue de "queue" acepta dato generico T, me alerta al colocar this ???? porque la variable de instancia es generica, no es BT
+		Queue<BinaryTree<T>> cola = new Queue<BinaryTree<T>>();
+		cola.enqueue((BinaryTree<T>) this); 
 		cola.enqueue(null);
 		int nivel = 1;
 		System.out.print("[ ");
 		while(!cola.isEmpty()&&nivel<=m) {
-			BinaryTree<Integer> aux = cola.dequeue();
+			BinaryTree<T> aux = cola.dequeue();
 			if(aux!=null) {
 				if(nivel>=n) {
 					System.out.print(aux.getData()+" ");
@@ -145,15 +144,14 @@ public class BinaryTree <T> {
 		System.out.print("]");
 		
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	public void imprimirNiveles() {
-		Queue<BinaryTree<Integer>> cola = new Queue<BinaryTree<Integer>>();
-		cola.enqueue((BinaryTree<Integer>) this); //???? por que si es el metodo enqueue de "queue" acepta dato generico T, me alerta al colocar this ???? porque la variable de instancia es generica, no es BT
+		Queue<BinaryTree<T>> cola = new Queue<BinaryTree<T>>();
+		cola.enqueue((BinaryTree<T>) this); //???? por que si es el metodo enqueue de "queue" acepta dato generico T, me alerta al colocar this ???? porque la variable de instancia es generica, no es BT
 		cola.enqueue(null);
 		System.out.print("[ ");
 		while(!cola.isEmpty()) {
-			BinaryTree<Integer> aux = cola.dequeue();
+			BinaryTree<T> aux = cola.dequeue();
 			if(aux!=null) {
 				System.out.print(aux.getData()+" ");
 				if(aux.hasLeftChild()) {
