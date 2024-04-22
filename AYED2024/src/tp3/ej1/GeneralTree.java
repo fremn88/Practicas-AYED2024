@@ -91,11 +91,11 @@ public class GeneralTree<T>{
 		while(!cola.isEmpty()&&!encontre) {
 			GeneralTree<T> v = cola.dequeue();
 			if(v!=null) {
-				if(!v.isEmpty()) { // ok???
+				if(v.getData()!=null) {
 					if(v.getData()==dato) {
 						encontre = true;
 					}
-					if(v.hasChildren()) {// que sucede en caso de que v tenga dato, pero tenga null en hijos (esta ok consultar hijos aca??? 
+					if(v.hasChildren()) {
 						List<GeneralTree<T>> hijos = v.getChildren(); 
 						for(GeneralTree<T> i: hijos) {
 							cola.enqueue(i);

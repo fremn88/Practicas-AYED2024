@@ -16,13 +16,14 @@ public class AnalizadorArbol {
 			while(!cola.isEmpty()) {
 				GeneralTree<AreaEmpresa> v = cola.dequeue();
 				if(v!=null) {
-					// no chequeo si arboll tiene dato null???
-					prom += v.getData().getTardanza();
-					cant++;
-					if(v.hasChildren()) {
-						List<GeneralTree<AreaEmpresa>> hijos = v.getChildren();
-						for(GeneralTree<AreaEmpresa> i: hijos) {
-							cola.enqueue(i);
+					if(v.getData()!=null) {
+						prom += v.getData().getTardanza();
+						cant++;
+						if(v.hasChildren()) {
+							List<GeneralTree<AreaEmpresa>> hijos = v.getChildren();
+							for(GeneralTree<AreaEmpresa> i: hijos) {
+								cola.enqueue(i);
+							}
 						}
 					}
 				} else if(!cola.isEmpty()) {

@@ -9,9 +9,8 @@ import tp3.ej1.GeneralTree;
 public class RecorridosAG {
 	public List<Integer> numerosImparesMayoresQuePreOrden(GeneralTree<Integer> a, int n){
 		List<Integer> res = new ArrayList<Integer>();
-		// debo preguntar si a != null ???? Luego debo preguntar si !a.isEmpty ????
 		if(a!=null) {
-			if(!a.isEmpty()) {
+			if(a.getData()!=null) {
 				Integer aux = a.getData();
 				if(aux%2!=0&&aux>n) {
 					res.add(aux);
@@ -37,7 +36,7 @@ public class RecorridosAG {
 				if(hijo!=null) {
 					res.addAll(this.numerosImparesMayoresQueInOrden(hijo, n));
 				}
-				if(!a.isEmpty()) {
+				if(a.getData()!=null) {
 					Integer aux = a.getData();
 					if(aux%2!=0&&aux>n) {
 						res.add(aux);
@@ -60,7 +59,6 @@ public class RecorridosAG {
 	
 	public List<Integer> numerosImparesMayoresQuePostOrden(GeneralTree<Integer> a, int n){
 		List<Integer> res = new ArrayList<Integer>();
-		// debo preguntar si a != null ???? Luego debo preguntar si !a.isEmpty ????
 		if(a!=null) {
 			if(a.hasChildren()) {
 				List<GeneralTree<Integer>> ListaHijos = a.getChildren();
@@ -69,7 +67,7 @@ public class RecorridosAG {
 					res.addAll(this.numerosImparesMayoresQuePostOrden(hijo, n));
 				}
 			}
-			if(!a.isEmpty()) {
+			if(a.getData()!=null) {
 				Integer aux = a.getData();
 				if(aux%2!=0&&aux>n) {
 					res.add(aux);
@@ -89,7 +87,7 @@ public class RecorridosAG {
 			while(!cola.isEmpty()) {
 				GeneralTree<Integer> v = cola.dequeue();
 				if(v!=null) {
-					if(!v.isEmpty()) {
+					if(v.getData()!=null) {
 						Integer aux = v.getData();
 						if(aux%2!=0&&aux>n) {
 							res.add(aux);
