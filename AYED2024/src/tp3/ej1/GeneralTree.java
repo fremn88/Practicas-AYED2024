@@ -2,7 +2,6 @@ package tp3.ej1;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import tp1.ej8.Queue;
 
 public class GeneralTree<T>{
@@ -171,6 +170,34 @@ public class GeneralTree<T>{
 			}
 		}
 		return encontre;
+	}
+	
+	public void imprimirNiveles() {
+		Queue<GeneralTree<T>> cola = new Queue<GeneralTree<T>>();
+		cola.enqueue((GeneralTree<T>) this); 
+		cola.enqueue(null);
+		System.out.print("[ ");
+		while(!cola.isEmpty()) {
+			GeneralTree<T> aux = cola.dequeue();
+			if(aux!=null) {
+				System.out.print(aux.getData()+" ");
+				if(aux.hasChildren()) {
+					List<GeneralTree<T>> hijos = new LinkedList<GeneralTree<T>>();
+					hijos = aux.getChildren();
+					for(GeneralTree<T> i: hijos) {
+						cola.enqueue(i);
+					}
+				}
+			} else {
+				if(!cola.isEmpty()) {
+					cola.enqueue(null);
+					System.out.print(" ]");
+					System.out.println("");
+					System.out.print("[ ");
+					}
+				}
+			}
+		System.out.print("]");
 	}
 }
 
