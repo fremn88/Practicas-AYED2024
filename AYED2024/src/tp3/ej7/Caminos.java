@@ -34,8 +34,7 @@ public class Caminos {
 				List<Integer> auxList = new LinkedList<Integer>();
 				List<GeneralTree<Integer>> hijos = ar.getChildren(); 
 				for(GeneralTree<Integer> i: hijos) {
-					Caminos aux = new Caminos(i);
-					auxList = aux.caminoAHojaMasLejana();
+					auxList = this.camino(i);
 					if(auxList.size()>tamanio) {
 						tamanio = auxList.size();
 						larga = auxList;
