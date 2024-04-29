@@ -66,7 +66,7 @@ public class GeneralTree<T>{
 			List<GeneralTree<T>> ListaHijos = this.getChildren(); 
 			int aux1 = 0;
 			int aux2 = 0;
-			foreach(GeneralTree<T> hijo: ListaHijos){
+			for(GeneralTree<T> hijo: ListaHijos){
 				// no es necesario preguntar si el hijo es null
 				aux2 = hijo.altura();
 				if(aux2>aux1){
@@ -141,7 +141,7 @@ public class GeneralTree<T>{
 		if(this.getData()==a) {
 			if(this.hasChildren()) {
 				List<GeneralTree<T>> hijos = this.getChildren();
-				foreach(GeneralTree<T> hijo: hijos){
+				for(GeneralTree<T> hijo: hijos){
 					if(!encontre){
 						encontre = hijo.esDescendiente(b);
 					}
@@ -151,7 +151,7 @@ public class GeneralTree<T>{
 			//busco ancestro y ejecuto busqueda descendiente
 			if(this.hasChildren()) {
 				List<GeneralTree<T>> hijos = this.getChildren();
-				foreach(GeneralTree<T> hijo: hijos){
+				for(GeneralTree<T> hijo: hijos){
 					encontre = hijo.esAncestro(a, b);
 				}
 			}
@@ -165,7 +165,7 @@ public class GeneralTree<T>{
 			encontre = true;
 		} else if(this.hasChildren()) {
 			List<GeneralTree<T>> hijos = this.getChildren();
-			foreach(GeneralTree<T> hijo: hijos){
+			for(GeneralTree<T> hijo: hijos){
 				encontre = hijo.esDescendiente(b);
 			}
 		}
