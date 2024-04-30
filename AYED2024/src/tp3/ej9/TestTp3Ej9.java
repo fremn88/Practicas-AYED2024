@@ -21,7 +21,7 @@ public class TestTp3Ej9 {
 		List<GeneralTree<Integer>> hijos15A = new LinkedList<GeneralTree<Integer>>();
 		hijos15A.add(new GeneralTree<Integer>(15));
 		hijos15A.add(new GeneralTree<Integer>(30));
-		GeneralTree<Integer> tree15A = new GeneralTree<Integer>(15,hijos15A);
+		GeneralTree<Integer> tree15A = new GeneralTree<Integer>(0,hijos15A);
 		
 		List<GeneralTree<Integer>> hijos15B = new LinkedList<GeneralTree<Integer>>();
 		hijos15B.add(tree15A);
