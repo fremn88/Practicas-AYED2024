@@ -19,14 +19,15 @@ public class ParcialArbol {
 	private static List<Integer> resolver(GeneralTree<Integer> arbol, Integer nivel){
 		List<Integer> lista = new LinkedList<Integer>();
 		if(arbol!=null) {
-			if(arbol.getData()==1) {
-				if(nivel == 0) {
-					lista.add(arbol.getData());
-				} else {
-					lista.add(arbol.getData()*nivel);
+			if(arbol.isLeaf()) {
+				if(arbol.getData()==1) {
+					if(nivel == 0) {
+						lista.add(arbol.getData());
+					} else {
+						lista.add(arbol.getData()*nivel);
+					}
 				}
-			}
-			if(arbol.hasChildren()) {
+			} else {
 				List<Integer> larga = new LinkedList<Integer>();
 				List<GeneralTree<Integer>> hijos = arbol.getChildren();
 				for(GeneralTree<Integer> i: hijos) {
