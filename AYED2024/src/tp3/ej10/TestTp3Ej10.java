@@ -65,9 +65,6 @@ public class TestTp3Ej10 {
 		System.out.println("");
 		System.out.println(" --------------------- ");
 		// testeo
-		List<Integer> lista = ParcialArbol.resolver(tree0);
-		for(Integer i: lista) {
-			System.out.println(i);
-		}
+		System.out.println(ParcialArbol.resolver(tree0));
 	}	
 }
