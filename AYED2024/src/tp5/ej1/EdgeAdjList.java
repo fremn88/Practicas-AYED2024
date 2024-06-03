@@ -1,4 +1,4 @@
-package tp4.ej1;
+package tp5.ej1;
 
 public class EdgeAdjList<T> implements Edge<T> {
 	private Vertex<T> target;
