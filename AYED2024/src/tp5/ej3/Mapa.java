@@ -149,9 +149,9 @@ public class Mapa<String> {
 							previo[posActual] = v.getPosition();
 						}
 	
-					}
-					q.enqueue(mapaCiudades.getVertex(buscarMenorDesco(pesos,marca)));		
+					}		
 				}
+				q.enqueue(mapaCiudades.getVertex(buscarMenorDesco(pesos,marca)));
 			}
 			
 			//Armar camino minimo con la tabla ... ?
