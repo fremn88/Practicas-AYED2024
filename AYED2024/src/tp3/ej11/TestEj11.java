@@ -35,15 +35,15 @@ public class TestEj11 {
 		
 		List<GeneralTree<Integer>> hijos2B = new LinkedList<GeneralTree<Integer>>();
 		hijos2B.add(tree3B);
-		GeneralTree<Integer> tree2B = new GeneralTree<Integer>(0,hijos2B);
+		//GeneralTree<Integer> tree2B = new GeneralTree<Integer>(0,hijos2B);
 		
 		List<GeneralTree<Integer>> hijos2C = new LinkedList<GeneralTree<Integer>>();
 		hijos2C.add(new GeneralTree<Integer>(1));
-		GeneralTree<Integer> tree2C = new GeneralTree<Integer>(1,hijos2C);
+		//GeneralTree<Integer> tree2C = new GeneralTree<Integer>(1,hijos2C);
 	
 		List<GeneralTree<Integer>> hijos1A = new LinkedList<GeneralTree<Integer>>();
 		hijos1A.add(tree2A);
-		GeneralTree<Integer> tree1A = new GeneralTree<Integer>(1,hijos1A);
+		//GeneralTree<Integer> tree1A = new GeneralTree<Integer>(1,hijos1A);
 
 		List<GeneralTree<Integer>> hijos1B = new LinkedList<GeneralTree<Integer>>();
 		hijos1B.add(new GeneralTree<Integer>(1));
