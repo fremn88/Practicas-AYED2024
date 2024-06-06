@@ -41,7 +41,6 @@ public class Mapa<String> {
 				}
 			}
 		}
-		
 	}	
 	
 	private int buscaPosDfs(String ciudad){
@@ -170,6 +169,48 @@ public class Mapa<String> {
 		}
 		return pos;
 	}                          
+	
+	// sin usar Dijkstra
+	
+	public List<String> caminoMasCorto2(String ciudad1, String ciudad2){
+		List<String> camino = new ArrayList<String>();
+		int tamanio = this.mapaCiudades.getSize()+1;
+		int minimo = numGrande;
+		int distancia = 0;
+		boolean[] marca = new boolean[tamanio];
+		int posInicial = buscaPosDfs(ciudad1);
+		int posFinal = buscaPosDfs(ciudad2);
+		
+		// se ejecuta busqueda solo si las ciudades ingresadas existen.
+		if(posInicial!=0&&posFinal!=0) {
+			List<String> temp = new ArrayList<String>();
+			dfsModificadoCaminoCorto(posInicial,temp,camino,marca,ciudad2,minimo,distancia);
+		}
+		return camino;
+	}
+	
+	private void dfsModificadoCaminoCorto(int pos, List<String> temp, List<String> camino, boolean[] marca, String ciudad2, int minimo, int distancia) {
+		Vertex<String> v = this.mapaCiudades.getVertex(pos);
+		if(v.getData().equals(ciudad2)) {
+			if(distancia<minimo) {
+				camino.addAll(temp);
+				minimo = distancia;
+			}
+		} else {
+			marca[pos]=true;
+			List<Edge<String>> aristas = mapaCiudades.getEdges(v);
+			for(Edge<String> arista: aristas) {
+				Vertex<String> u = arista.getTarget();
+				if(!marca[u.getPosition()]) {
+					temp.add(v.getData());
+					distancia+=arista.getWeight();
+					dfsModificadoCaminoCorto(u.getPosition(),temp,camino,marca,ciudad2,minimo,distancia);
+					temp.remove(temp.size());  //acondiciono lista y distancia para evaluar otros caminos en los demas vertices.
+					distancia-=arista.getWeight();
+				}
+			}
+		}
+	}
 	
 	// Ej3.inc4
 	
