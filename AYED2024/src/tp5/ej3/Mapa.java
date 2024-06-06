@@ -20,7 +20,7 @@ public class Mapa<String> {
 	public List<String> devolverCamino(String ciudad1, String ciudad2){
 		List<String> camino = new ArrayList<String>();
 		List<String> temp = new ArrayList<String>();
-		boolean[] marca = new boolean[this.mapaCiudades.getSize()+1];
+		boolean[] marca = new boolean[this.mapaCiudades.getSize()];
 		int posCiudad1 = this.buscaPosDfs(ciudad1);
 		dfsModificado(posCiudad1,temp,camino,marca,ciudad2);
 		return camino;
@@ -30,22 +30,28 @@ public class Mapa<String> {
 		marca[pos] = true;
 		Vertex<String> v = this.mapaCiudades.getVertex(pos);
 		temp.add(v.getData());
-		if(v.getData().equals(ciudad2)) {
+		if(v.getData().equals(ciudad2)) {		
 			camino.addAll(temp);
 		} else {
 			List<Edge<String>> aristas = mapaCiudades.getEdges(v);
+			//while con iterador y cond de camimo
 			for(Edge<String> arista: aristas) {
 				Vertex<String> u = arista.getTarget();
 				if(!marca[u.getPosition()]) {
+					
 					dfsModificado(u.getPosition(),temp,camino,marca,ciudad2);
+					
+					//si !camino.isEmpty() { return } 
 				}
 			}
 		}
+		temp.remove(v.getData());
+		marca[pos] = false;
 	}	
 	
 	private int buscaPosDfs(String ciudad){
 		int pos = 0;
-		boolean[] marca = new boolean[this.mapaCiudades.getSize()+1];		 
+		boolean[] marca = new boolean[this.mapaCiudades.getSize()];		 
 		for(int i=1;i<=marca.length;i++) {
 			if(!marca[i]) {
 				dfs(i,pos,marca,ciudad);
@@ -78,7 +84,7 @@ public class Mapa<String> {
 	public List<String> devolverCaminoExeptuando(String ciudad1, String ciudad2, List<String> ciudades){
 		List<String> camino = new ArrayList<String>();
 		List<String> temp = new ArrayList<String>();
-		boolean[] marca = new boolean[this.mapaCiudades.getSize()+1];
+		boolean[] marca = new boolean[this.mapaCiudades.getSize()];
 		if(!ciudades.contains(ciudad1)&&!ciudades.contains(ciudad2)) {
 			int posCiudad1 = this.buscaPosDfs(ciudad1);
 			for(int i=0; i<marca.length;i++) {
@@ -115,7 +121,7 @@ public class Mapa<String> {
 	
 	public List<String> caminoMasCorto(String ciudad1, String ciudad2){
 		List<String> lista = new ArrayList<String>();
-		int tamanio = this.mapaCiudades.getSize()+1;
+		int tamanio = this.mapaCiudades.getSize();
 		int[] pesos = new int[tamanio];
 		int[] previo = new int[tamanio];
 		boolean[] marca = new boolean[tamanio];
@@ -174,7 +180,7 @@ public class Mapa<String> {
 	
 	public List<String> caminoMasCorto2(String ciudad1, String ciudad2){
 		List<String> camino = new ArrayList<String>();
-		int tamanio = this.mapaCiudades.getSize()+1;
+		int tamanio = this.mapaCiudades.getSize();
 		int minimo = numGrande;
 		int distancia = 0;
 		boolean[] marca = new boolean[tamanio];
@@ -193,6 +199,8 @@ public class Mapa<String> {
 		Vertex<String> v = this.mapaCiudades.getVertex(pos);
 		if(v.getData().equals(ciudad2)) {
 			if(distancia<minimo) {
+				// limpiar el camino antes de agregar!
+				//agregar el destino
 				camino.addAll(temp);
 				minimo = distancia;
 			}
@@ -257,13 +265,14 @@ public class Mapa<String> {
 		int posCiudad2 = buscaPosDfs(ciudad2);
 		if(posCiudad1>0&&posCiudad2>0) {
 			List<String> temp = new ArrayList<String>();
-			boolean[] marca = new boolean[mapaCiudades.getSize()+1]; // lista comienza en 1?
+			boolean[] marca = new boolean[mapaCiudades.getSize()]; 
 			dfsModificadoMenorCarga(posCiudad1,temp,camino,marca,ciudad2,tanque,recarga,cargas,minimo);
 		}
 		return camino;
 	}
 	
 	private void dfsModificadoMenorCarga(int pos, List<String> temp, List<String> camino, boolean[] marca, String ciudad2, int tanque, int recarga, int cargas, int minimo) {
+		// trabajar con objeto con lista camino + minimo recarga.
 		// marca[pos]=true; no marco aca porque necesito tener el vertice de ciudad2 no marcado, para evaluar los distintos caminos.
 		Vertex<String> v = mapaCiudades.getVertex(pos);
 		// temp.add(v.getData()); no se puede agregar aca xq no se en esta instancia si llego a v.
