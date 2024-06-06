@@ -223,7 +223,7 @@ public class Mapa<String> {
 	}
 	
 	private void dfsModificadoMenorCarga(int pos, List<String> temp, List<String> camino, boolean[] marca, String ciudad2, int tanque, int recarga, int cargas, int minimo) {
-		marca[pos]=true;
+		// marca[pos]=true; no marco aca porque necesito tener el vertice de ciudad2 no marcado, para evaluar los distintos caminos.
 		Vertex<String> v = mapaCiudades.getVertex(pos);
 		// temp.add(v.getData()); no se puede agregar aca xq no se en esta instancia si llego a v.
 		if(v.getData().equals(ciudad2)) {
@@ -232,6 +232,8 @@ public class Mapa<String> {
 				minimo = cargas;
 			}
 		} else {
+			//si no llegue a ciudad, marco visitado (aca siempre llego con un vertice no visitado)
+			marca[pos]=true;
 			//caso en que debo recargar
 			if(tanque==0) {
 				tanque=recarga;
