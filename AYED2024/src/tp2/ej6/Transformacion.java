@@ -12,7 +12,9 @@ public class Transformacion {
 	}
 	
 	public BinaryTree<Integer> suma() {
-		tot(this.getArbol());
+		if(this.getArbol()!=null) {
+			tot(this.getArbol());
+		}
 		return this.arbol;
 	}
 	

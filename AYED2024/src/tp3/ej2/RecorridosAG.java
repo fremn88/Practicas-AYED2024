@@ -1,108 +1,94 @@
 package tp3.ej2;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import tp1.ej8.Queue;
 import tp3.ej1.GeneralTree;
 
 public class RecorridosAG {
+	
 	public List<Integer> numerosImparesMayoresQuePreOrden(GeneralTree<Integer> a, int n){
 		List<Integer> res = new ArrayList<Integer>();
 		if(a!=null) {
-			if(a.getData()!=null) {
-				Integer aux = a.getData();
-				if(aux%2!=0&&aux>n) {
-					res.add(aux);
-				}
-			}
-			if(a.hasChildren()) {
-				List<GeneralTree<Integer>> ListaHijos = a.getChildren();
-				while(!ListaHijos.isEmpty()) {
-					GeneralTree<Integer> hijo = ListaHijos.remove(0);
-					res.addAll(this.numerosImparesMayoresQuePreOrden(hijo, n));
-				}
-			}
+			numerosImparesMayoresQuePreOrden(a,n,res);
 		}
 		return res;
 	}
 	
+	private void numerosImparesMayoresQuePreOrden(GeneralTree<Integer> a, int n, List<Integer> lis) {
+		Integer dato = a.getData();
+		if(dato%2!=0&&dato>n) {
+			lis.add(a.getData());
+		}
+		List<GeneralTree<Integer>> hijos = a.getChildren();
+		Iterator<GeneralTree<Integer>> it = hijos.iterator();
+		while(it.hasNext()) {
+			numerosImparesMayoresQuePreOrden(it.next(),n,lis);
+		}
+	}
+	
+	
 	public List<Integer> numerosImparesMayoresQueInOrden(GeneralTree<Integer> a, int n){
 		List<Integer> res = new ArrayList<Integer>();
 		if(a!=null) {
-			if(a.hasChildren()) {
-				List<GeneralTree<Integer>> ListaHijos = a.getChildren();
-				GeneralTree<Integer> hijo = ListaHijos.remove(0);
-				if(hijo!=null) {
-					res.addAll(this.numerosImparesMayoresQueInOrden(hijo, n));
-				}
-				if(a.getData()!=null) {
-					Integer aux = a.getData();
-					if(aux%2!=0&&aux>n) {
-						res.add(aux);
-					}
-				}
-				while(!ListaHijos.isEmpty()) {
-					hijo = ListaHijos.remove(0);
-					res.addAll(this.numerosImparesMayoresQuePreOrden(hijo, n));
-				}
-			}
-			else if(!a.isEmpty()) {
-				Integer aux = a.getData();
-				if(aux%2!=0&&aux>n) {
-					res.add(aux);
-				}
-			}
+			numerosImparesMayoresQueInOrden(a,n,res);
 		}
 		return res;
+	}
+	
+	public void numerosImparesMayoresQueInOrden(GeneralTree<Integer> a, int n, List<Integer> lis) {
+		List<GeneralTree<Integer>> hijos = a.getChildren();
+		if(a.hasChildren()) {
+			numerosImparesMayoresQueInOrden(hijos.get(0),n,lis);
+		}
+		Integer dato = a.getData();
+		if(dato%2!=0&&dato>n) {
+			lis.add(a.getData());
+		}
+		for(int i=1;i<hijos.size();i++) {
+			numerosImparesMayoresQueInOrden(hijos.get(i),n,lis);
+		}
 	}
 	
 	public List<Integer> numerosImparesMayoresQuePostOrden(GeneralTree<Integer> a, int n){
 		List<Integer> res = new ArrayList<Integer>();
 		if(a!=null) {
-			if(a.hasChildren()) {
-				List<GeneralTree<Integer>> ListaHijos = a.getChildren();
-				while(!ListaHijos.isEmpty()) {
-					GeneralTree<Integer> hijo = ListaHijos.remove(0);
-					res.addAll(this.numerosImparesMayoresQuePostOrden(hijo, n));
-				}
-			}
-			if(a.getData()!=null) {
-				Integer aux = a.getData();
-				if(aux%2!=0&&aux>n) {
-					res.add(aux);
-				}
-			}
+			numerosImparesMayoresQuePostOrden(a,n,res);
 		}
 		return res;
 	}
 	
+	private void numerosImparesMayoresQuePostOrden(GeneralTree<Integer> a, int n, List<Integer> lis) {
+		List<GeneralTree<Integer>> hijos = a.getChildren();
+		Iterator<GeneralTree<Integer>> it = hijos.iterator();
+		while(it.hasNext()) {
+			numerosImparesMayoresQuePreOrden(it.next(),n,lis);
+		}
+		Integer dato = a.getData();
+		if(dato%2!=0&&dato>n) {
+			lis.add(a.getData());
+		}
+	}
+	
 	public List<Integer> numerosImparesMayoresQuePorNiveles(GeneralTree<Integer> a, int n){
 		List<Integer> res = new ArrayList<Integer>();
-		// debo preguntar si a != null ???? Luego debo preguntar si !a.isEmpty ????
-		if(a!=null) {
-			Queue<GeneralTree<Integer>> cola = new Queue<GeneralTree<Integer>>();
-			cola.enqueue(a);
-			cola.enqueue(null);
-			while(!cola.isEmpty()) {
-				GeneralTree<Integer> v = cola.dequeue();
-				if(v!=null) {
-					if(v.getData()!=null) {
-						Integer aux = v.getData();
-						if(aux%2!=0&&aux>n) {
-							res.add(aux);
-						}
-					}
-					if(v.hasChildren()) {
-						List<GeneralTree<Integer>> ListaHijos = v.getChildren();
-						while(!ListaHijos.isEmpty()) {
-							GeneralTree<Integer> hijo = ListaHijos.remove(0);
-							cola.enqueue(hijo);
-						}
-					}
+		GeneralTree<Integer> ar;
+		Queue<GeneralTree<Integer>> cola = new Queue<GeneralTree<Integer>>();
+		cola.enqueue(a);
+		while(!cola.isEmpty()) {
+			ar = cola.dequeue();
+			if(ar!=null) {
+				Integer dato = ar.getData();
+				if(dato%2!=0&&dato>n) {
+					res.add(dato);
 				}
-				else if(!cola.isEmpty()) {
-					cola.enqueue(null);
+				if(ar.hasChildren()) {
+					List<GeneralTree<Integer>> hijos = a.getChildren();
+					for(GeneralTree<Integer> hijo: hijos) {
+						cola.enqueue(hijo);
+					}
 				}
 			}
 		}

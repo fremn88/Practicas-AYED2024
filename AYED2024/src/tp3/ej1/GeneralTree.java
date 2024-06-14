@@ -1,5 +1,6 @@
 package tp3.ej1;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import tp1.ej8.Queue;
@@ -92,7 +93,7 @@ public class GeneralTree<T>{
 					if(v.getData()==dato) {
 						encontre = true;
 					}
-					if(v.hasChildren()) {
+					if(v.hasChildren()&&!encontre) {
 						List<GeneralTree<T>> hijos = v.getChildren(); 
 						for(GeneralTree<T> i: hijos) {
 							cola.enqueue(i);
@@ -141,18 +142,18 @@ public class GeneralTree<T>{
 		if(this.getData()==a) {
 			if(this.hasChildren()) {
 				List<GeneralTree<T>> hijos = this.getChildren();
-				for(GeneralTree<T> hijo: hijos){
-					if(!encontre){
-						encontre = hijo.esDescendiente(b);
-					}
+				Iterator<GeneralTree<T>> it = hijos.iterator();
+				while(it.hasNext()&&!encontre) {
+					encontre = it.next().esDescendiente(b);
 				}
 			}
 		} else {
 			//busco ancestro y ejecuto busqueda descendiente
 			if(this.hasChildren()) {
 				List<GeneralTree<T>> hijos = this.getChildren();
-				for(GeneralTree<T> hijo: hijos){
-					encontre = hijo.esAncestro(a, b);
+				Iterator<GeneralTree<T>> it = hijos.iterator();
+				while(it.hasNext()&&!encontre) {
+					encontre = it.next().esAncestro(a, b);
 				}
 			}
 		}
@@ -165,8 +166,9 @@ public class GeneralTree<T>{
 			encontre = true;
 		} else if(this.hasChildren()) {
 			List<GeneralTree<T>> hijos = this.getChildren();
-			for(GeneralTree<T> hijo: hijos){
-				encontre = hijo.esDescendiente(b);
+			Iterator<GeneralTree<T>> it = hijos.iterator();
+			while(it.hasNext()&&!encontre) {
+				encontre = it.next().esDescendiente(b);
 			}
 		}
 		return encontre;

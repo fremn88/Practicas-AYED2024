@@ -18,7 +18,7 @@ public class ProfundidadDeArbolBinario {
 		if(ar!=null) {
 			cola.enqueue(ar); 
 			cola.enqueue(null);
-			int nivel = 1;
+			int nivel = 0;
 			while(!cola.isEmpty()&&nivel<p) {
 				BinaryTree<Integer> aux = cola.dequeue();
 				if(aux!=null) {

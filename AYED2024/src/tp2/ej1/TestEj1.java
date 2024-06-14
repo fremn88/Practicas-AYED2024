@@ -14,18 +14,18 @@ public class TestEj1 {
 		BinaryTree<Integer> testTreeDer = new BinaryTree<Integer>();
 		testTreeIzq.setData(2);
 		testTreeIzq.addLeftChild(new BinaryTree<Integer>(4));
-		testTreeIzq.addRightChild(new BinaryTree<Integer>(5));
+		//testTreeIzq.addRightChild(new BinaryTree<Integer>(5));
 		testTreeDer.setData(3);
 		testTreeDer.addLeftChild(new BinaryTree<Integer>(6));
 		testTree.addLeftChild(testTreeIzq);
 		testTree.addRightChild(testTreeDer);
 		testTree.setData(1);
 		//-------------------------------
-		/*
+		
 
 		System.out.println("Recorrido original Inorder");
 		testTree.imptimirInorder();
-		//System.out.println("Cantidad de hojas: "+testTree.contarHojas());
+		System.out.println("Cantidad de hojas: "+testTree.contarHojas());
 		System.out.println("Recorrido espejo Inorder");
 		//				 1
 		//				/  \
@@ -35,9 +35,9 @@ public class TestEj1 {
 		// -----------------------------
 		testTree.espejo().imptimirInorder();
 		
-		*/
 		
-		testTree.entreNiveles(2, 3);
+		
+		//testTree.entreNiveles(2, 3);
 	}
 
 }

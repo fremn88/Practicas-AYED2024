@@ -116,7 +116,7 @@ public class BinaryTree <T> {
 		Queue<BinaryTree<T>> cola = new Queue<BinaryTree<T>>();
 		cola.enqueue((BinaryTree<T>) this); 
 		cola.enqueue(null);
-		int nivel = 1;
+		int nivel = 0;
 		System.out.print("[ ");
 		while(!cola.isEmpty()&&nivel<=m) {
 			BinaryTree<T> aux = cola.dequeue();

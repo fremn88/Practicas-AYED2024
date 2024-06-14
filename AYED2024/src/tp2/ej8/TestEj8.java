@@ -52,7 +52,7 @@ public class TestEj8 {
 		BinaryTree<Integer> A1testTree_5 = new BinaryTree<Integer>();
 		BinaryTree<Integer> A1testTree2 = new BinaryTree<Integer>();
 		A1testTree7.setData(7);
-		A1testTree7.addRightChild(new BinaryTree<Integer>(8));
+		A1testTree7.addRightChild(new BinaryTree<Integer>(7));
 		A1testTree2.setData(2);
 		A1testTree2.addLeftChild(A1testTree7);
 		A1testTree_5.setData(-5);

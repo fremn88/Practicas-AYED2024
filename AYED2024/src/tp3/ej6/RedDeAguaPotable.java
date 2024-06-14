@@ -11,19 +11,28 @@ public class RedDeAguaPotable {
 	
 	public double minimoCaudal(double caudal) {
 		double min = 0;
-		if(this.red.isLeaf()) {
-			min = caudal;
-		} else {
-			List<GeneralTree<Character>> hijos = this.red.getChildren();
-			int cant = hijos.size();
-			double aux = 0;
-			for(GeneralTree<Character> i: hijos) {
-				RedDeAguaPotable hija = new RedDeAguaPotable(i);
-				aux = hija.minimoCaudal(caudal/cant);
-				if(aux<min) {
-					min = aux;
+		if(this.red!=null) {
+			min = minimoCaudal(this.red,caudal);
+		}
+		return min;
+	}
+	
+	private double minimoCaudal(GeneralTree<Character> ar, double caudal) {
+		double min = 0;
+		if(ar!=null) {
+			if(ar.isLeaf()) {
+				min = caudal;
+			} else {
+				List<GeneralTree<Character>> hijos = ar.getChildren();
+				int cant = hijos.size();
+				double aux = 0;
+				for(GeneralTree<Character> i: hijos) {
+					aux = minimoCaudal(i,caudal/cant);
+					if(aux<min) {
+						min = aux;
+					}
 				}
-			}
+			}		
 		}
 		return min;
 	}
