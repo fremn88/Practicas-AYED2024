@@ -1,5 +1,6 @@
 package tp5.ej1;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class VertexAdjList<T> implements Vertex<T> {
@@ -34,15 +35,16 @@ public class VertexAdjList<T> implements Vertex<T> {
 		return this.edges;
 	}
 	
-	Edge<T> getEdge(Vertex<T> verticeDestino){
+	public Edge<T> getEdge(Vertex<T> verticeDestino){
 		//recibe un destino, obtiene la arista que apunta a ese dstino y la devuelve
-		Edge<T> arista = null;
-		for(Edge<T> i: this.edges) {
-			if(i.getTarget()==verticeDestino) {
-				arista = i;
+		if(this.edges!=null) {
+			for(Edge<T> i: this.edges) {
+				if(i.getTarget().getPosition()==verticeDestino.getPosition()) {
+					return i;
+				}
 			}
 		}
-		return arista;
+		return null;
 	}
 	
 	void disconnect(Vertex<T> vertice) {
@@ -66,6 +68,9 @@ public class VertexAdjList<T> implements Vertex<T> {
 		//hago la conexion siempre y cuando esta no exista de forma preliminar.
 		Edge<T> arista = this.getEdge(destino);
 		if(arista == null) {
+			if(this.edges == null) {
+				this.edges = new LinkedList<Edge<T>>();
+			}
 			this.edges.add(new EdgeAdjList<T>(destino,weight));
 		}
 	}

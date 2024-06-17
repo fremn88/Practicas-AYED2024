@@ -137,6 +137,7 @@ public class GeneralTree<T>{
 		return ancho1;		
 	}
 	
+	
 	public boolean esAncestro(T a, T b) {
 		boolean encontre = false;
 		if(this.getData()==a) {

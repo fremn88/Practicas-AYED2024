@@ -4,6 +4,10 @@ public class EdgeAdjList<T> implements Edge<T> {
 	private Vertex<T> target;
 	private int weight;
 	
+	public EdgeAdjList() {
+		
+	}
+	
 	public EdgeAdjList(Vertex<T> vertex, int weight) {
 		this.target=vertex;
 		this.weight=weight;

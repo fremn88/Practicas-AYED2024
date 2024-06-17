@@ -13,7 +13,7 @@ public class Recorridos<T> {
 	public List<T> dfs(Graph<T> grafo){
 		List<T> lista = new ArrayList<T>();
 		boolean[] marca = new boolean[grafo.getSize()];		 
-		for(int i=1;i<=grafo.getSize();i++) {
+		for(int i=0;i<grafo.getSize();i++) {
 			if(!marca[i]) {
 				dfs(i,grafo,lista,marca);
 			}
@@ -24,8 +24,10 @@ public class Recorridos<T> {
 	void dfs(int i,Graph<T> grafo,List<T> lista,boolean[] marca) {
 		marca[i]=true;
 		Vertex<T> v = grafo.getVertex(i);
+		System.out.println(v.getData());
 		lista.add(v.getData());
-		List<Edge<T>> aristas = grafo.getEdges(v);	// no hace falta chequear null.						
+		List<Edge<T>> aristas = grafo.getEdges(v);	// SI hace falta chequear null!!!! esta mal lo que dijeron de la catedra !!!!!
+		if(aristas!=null) {
 		for(Edge<T> arista: aristas) {
 			Vertex<T> destino = arista.getTarget();
 			int posicion = destino.getPosition();
@@ -33,6 +35,7 @@ public class Recorridos<T> {
 				dfs(posicion,grafo,lista,marca);
 				}
 			}
+		}
 	}
 	
 	// Orden dfs |V|+|E|
@@ -40,7 +43,7 @@ public class Recorridos<T> {
 	public List<T> bfs(Graph<T> grafo){
 		boolean[] marca = new boolean[grafo.getSize()];
 		List<T> lista = new ArrayList<T>();
-		for(int i=1;i<=grafo.getSize();i++) {
+		for(int i=0;i<grafo.getSize();i++) {
 			if(!marca[i]) {
 				bfs(i,grafo,lista,marca);
 			}
@@ -56,12 +59,14 @@ public class Recorridos<T> {
 			Vertex<T> v = q.dequeue();
 			lista.add(v.getData());
 			List<Edge<T>> aristas = grafo.getEdges(v);
-			for(Edge<T> arista: aristas) {
-				Vertex<T> u = arista.getTarget();
-				int pos = u.getPosition();
-				if(!marca[pos]) {
-					marca[pos] = true;
-					q.enqueue(v);
+			if(aristas!=null) {
+				for(Edge<T> arista: aristas) {
+					Vertex<T> u = arista.getTarget();
+					int pos = u.getPosition();
+					if(!marca[pos]) {
+						marca[pos] = true;
+						q.enqueue(u);
+					}
 				}
 			}
 		}

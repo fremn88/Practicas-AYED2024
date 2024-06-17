@@ -6,6 +6,41 @@ import java.util.List;
 import tp3.ej1.GeneralTree;
 
 public class ParcialArbol {
+	
+	public static List<Integer> resolver(GeneralTree<Integer> arbol){
+		List<Integer> lis = new LinkedList<Integer>();
+		if(arbol!=null) {
+			
+		}
+		return lis;
+	}
+	
+	private PesoLista resolver(GeneralTree<Integer> ar, int nivel) {
+		List<Integer> lis = new LinkedList<Integer>();
+		if(ar.isLeaf()) {
+			int peso = 0;
+			if(ar.getData()==1) {
+				lis.add(1);
+				peso = nivel;
+			}
+			return new PesoLista(peso,lis);
+		} else {
+			int pesoMax = 0;
+			PesoLista actual;
+			List<GeneralTree<Integer>> hijos = ar.getChildren();
+			for(GeneralTree<Integer> hijo: hijos) {
+				actual = resolver(hijo,nivel+1);
+				if(actual.getPeso()>pesoMax) {
+					pesoMax = actual.getPeso();
+					lis = actual.getLista();
+				}
+			}
+			lis.add(1);
+			return new PesoLista(pesoMax+nivel,lis);
+		}
+	}
+	
+	/*
 	public static List<Integer> resolver(GeneralTree<Integer> arbol){
 		List<Integer> lista = resolver(arbol,0);
 		int i = 0;

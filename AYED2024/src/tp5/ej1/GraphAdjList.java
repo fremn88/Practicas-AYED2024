@@ -10,7 +10,12 @@ public class GraphAdjList<T> implements Graph<T> {
 	@Override
 	public Vertex<T> createVertex(T data) {
 		// TODO Auto-generated method stub
-		int newPos = this.vertices.size(); //obtengo la posicion para guardarla como dato en vertice. Esta resulta del tamaño de la lista de verticves del grafo al momento de crear el vertice.
+		int newPos = 0;
+		if(vertices==null) {
+			vertices = new LinkedList<VertexAdjList<T>>();
+		} else {
+			newPos = this.vertices.size(); //obtengo la posicion para guardarla como dato en vertice. Esta resulta del tamaño de la lista de verticves del grafo al momento de crear el vertice.
+		}
 		VertexAdjList<T> vertex= new VertexAdjList<T>(data,newPos);
 		this.vertices.add(vertex);
 		return vertex;
@@ -47,9 +52,11 @@ public class GraphAdjList<T> implements Graph<T> {
 		return null;
 	}
 	
-	private boolean belongs(Vertex<T> vertex) {
-		int pos = vertex.getPosition();
-		return pos>=0 && pos<this.vertices.size() && this.vertices.get(pos)==vertex;
+	public boolean belongs(Vertex<T> vertex) {
+		if(vertex!=null) {
+			int pos = vertex.getPosition();
+			return pos>=0 && pos<this.vertices.size() && this.vertices.get(pos)==vertex;
+		} else return false;	
 	}
 
 	@Override
