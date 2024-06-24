@@ -4,15 +4,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
-import tp1.ej8.Queue;
 import tp5.ej1.Edge;
 import tp5.ej1.Graph;
 import tp5.ej1.Vertex;
+import tp5.ej2.Recorridos;
 
 @SuppressWarnings("hiding")
 public class Mapa<String> {
-	private final static int numGrande = 9999;
 	Graph<String> mapaCiudades;
 	
 	public Mapa(Graph<String> mapa) {
@@ -22,183 +20,223 @@ public class Mapa<String> {
 	// OK chequeado
 	public List<String> devolverCamino(String ciudad1, String ciudad2){
 		List<String> camino = new ArrayList<String>();
-		List<String> temp = new ArrayList<String>();
-		boolean[] marca = new boolean[this.mapaCiudades.getSize()];
-		Vertex<String> origen = mapaCiudades.search(ciudad1);
-		Vertex<String> destino = mapaCiudades.search(ciudad2);
-		if(origen!=null&&destino!=null) {
-			marca[origen.getPosition()]=true;
-			temp.add(origen.getData());
-			dfsModificado(origen.getPosition(),temp,camino,marca,ciudad2);
+		if(!mapaCiudades.isEmpty()) {
+			boolean[] marca = new boolean[this.mapaCiudades.getSize()];
+			Vertex<String> origen = mapaCiudades.search(ciudad1);
+			Vertex<String> destino = mapaCiudades.search(ciudad2);
+			if(origen!=null&&destino!=null) {
+				dfsModificado(origen,destino,marca,camino);
+			}
 		}
 		return camino;
 	}
 	
-	// OK chequeado
-	private void dfsModificado(int pos, List<String> temp, List<String> camino, boolean[] marca, String ciudad2) {
-		Vertex<String> v = this.mapaCiudades.getVertex(pos);
-		if(v.getData().equals(ciudad2)) {
-			camino.addAll(temp);
-			return;
-		}
-		List<Edge<String>> aristas = mapaCiudades.getEdges(v);
-		Iterator<Edge<String>> it = aristas.iterator();
-		while(it.hasNext()&&camino.isEmpty()) {
-			Vertex<String> u = it.next().getTarget();
-			int j = u.getPosition();
-			if(!marca[j]) {
-				marca[j]=true;
-				temp.add(u.getData());
-				dfsModificado(j,temp,camino,marca,ciudad2);
-				temp.remove(u.getData());
-				marca[j]=false;
+	// DFS V1
+	private boolean dfsModificado(Vertex<String> origen, Vertex<String> destino, boolean[] marca, List<String> camino) {
+		marca[origen.getPosition()] = true;
+		boolean fin = false;
+		camino.add(origen.getData());
+		if(origen == destino) {
+			fin = true;
+		} else {
+			List<Edge<String>> aristas = mapaCiudades.getEdges(origen);
+			Iterator<Edge<String>> it = aristas.iterator();
+			while(it.hasNext()&&!fin) {
+				Vertex<String> v = it.next().getTarget();
+				int j = v.getPosition();
+				if(!marca[j]) {
+					fin = dfsModificado(v,destino,marca,camino);
+				}
+			}
+			if(!fin) {
+				camino.remove(camino.size()-1);
+			}
+			marca[origen.getPosition()] = false;
+			}
+		return fin;
+	}	
+	
+	public List<String> devolverCamino2(String ciudad1, String ciudad2){
+		List<String> camino = new ArrayList<String>();
+		List<String> temp = new ArrayList<String>();
+		if(!mapaCiudades.isEmpty()) {
+			boolean[] marca = new boolean[this.mapaCiudades.getSize()];
+			Vertex<String> origen = mapaCiudades.search(ciudad1);
+			Vertex<String> destino = mapaCiudades.search(ciudad2);
+			if(origen!=null&&destino!=null) {
+				dfsModificadoV2(origen,destino,marca,camino,temp);
 			}
 		}
-	}	
+		return camino;
+	}
+	
+	// DFS V2
+	private void dfsModificadoV2(Vertex<String> origen, Vertex<String> destino, boolean[] marca, List<String> camino, List<String> temp) {
+		marca[origen.getPosition()] = true;
+		temp.add(origen.getData());
+		if(origen == destino) {
+			camino.addAll(temp);
+		} else {
+			List<Edge<String>> aristas = mapaCiudades.getEdges(origen);
+			Iterator<Edge<String>> it = aristas.iterator(); //Las aristas nunca estan null, al crearlas se olbiga a inicalizarla si el vertice la tiene null.
+			while(it.hasNext()&&camino.isEmpty()) {
+				Vertex<String> v = it.next().getTarget();
+				if(!marca[v.getPosition()]) {
+					dfsModificadoV2(v,destino,marca,camino,temp);
+				}
+			}
+			temp.remove(origen.getData());
+			marca[origen.getPosition()] = false;
+		}
+	}
 	
 	// Ej3.inc2
 	
 	public List<String> devolverCaminoExeptuando(String ciudad1, String ciudad2, List<String> ciudades){
 		List<String> camino = new ArrayList<String>();
 		List<String> temp = new ArrayList<String>();
-		boolean[] marca = new boolean[this.mapaCiudades.getSize()];
-		if(!ciudades.contains(ciudad1)&&!ciudades.contains(ciudad2)) {
+		if(!mapaCiudades.isEmpty()) {
+			boolean[] marca = new boolean[this.mapaCiudades.getSize()];
 			Vertex<String> origen = mapaCiudades.search(ciudad1);
 			Vertex<String> destino = mapaCiudades.search(ciudad2);
 			if(origen!=null&&destino!=null) {
-				marca[origen.getPosition()]=true;
-				temp.add(origen.getData());
-				dfsModificado2(origen.getPosition(),temp,camino,marca,ciudad2,ciudades);
+				dfsModificadoInc2(origen,destino,marca,camino,temp,ciudades);
 			}
 		}
 		return camino;
 	}
 	
 	// OK chequeado
-	private void dfsModificado2(int pos, List<String> temp, List<String> camino, boolean[] marca, String ciudad2, List<String> ciudades) {
-		Vertex<String> v = this.mapaCiudades.getVertex(pos);
-		if(v.getData().equals(ciudad2)) {
+	
+	private void dfsModificadoInc2(Vertex<String> origen, Vertex<String> destino, boolean[] marca, List<String> camino, List<String> temp, List<String> ciudades) {
+		marca[origen.getPosition()] = true;
+		temp.add(origen.getData());
+		if(origen == destino) {
 			camino.addAll(temp);
-			return;
-		}
-		List<Edge<String>> aristas = mapaCiudades.getEdges(v);
-		Iterator<Edge<String>> it = aristas.iterator();
-		while(it.hasNext()&&camino.isEmpty()) {
-			Vertex<String> u = it.next().getTarget();
-			int j = u.getPosition();
-			if(!marca[j]&&!ciudades.contains(u.getData())) {
-				marca[j]=true;
-				temp.add(u.getData());
-				dfsModificado(j,temp,camino,marca,ciudad2);
-				temp.remove(u.getData());
-				marca[j]=false;
-			}
-		}
-	}	
-	
-	// Ej3.inc3
-	
-	public List<String> caminoMasCorto(String ciudad1, String ciudad2){
-		List<String> lista = new ArrayList<String>();
-		int tamanio = this.mapaCiudades.getSize();
-		int[] pesos = new int[tamanio];
-		int[] previo = new int[tamanio];
-		boolean[] marca = new boolean[tamanio];
-		Vertex<String> origen = mapaCiudades.search(ciudad1);
-		Vertex<String> destino = mapaCiudades.search(ciudad2);
-		
-		if(origen!=null&&destino!=null) {
-			int posInicial = mapaCiudades.search(ciudad1).getPosition();
-			int posFinal = mapaCiudades.search(ciudad2).getPosition();
-
-			for(int i=0; i<pesos.length;i++) {
-				pesos[i]=numGrande;
-			}
-			pesos[posInicial] = 0;
-			
-			//Se implementa Dijkstra
-			
-			Queue<Vertex<String>> q = new Queue<Vertex<String>>();
-			q.enqueue(this.mapaCiudades.getVertex(posInicial));
-			while(!q.isEmpty()) {
-				Vertex<String> v = q.dequeue();
-				int posAnterior = v.getPosition();
-				marca[posAnterior] = true;
-				List<Edge<String>> aristas = this.mapaCiudades.getEdges(v);
-				for(Edge<String> arista: aristas) {
-					Vertex<String> w = arista.getTarget();
-					int posActual = w.getPosition();
-					if(!marca[posActual]) {
-						if(pesos[posActual]>pesos[posAnterior]+arista.getWeight()) {
-							pesos[posActual] = pesos[posAnterior]+arista.getWeight();
-							previo[posActual] = v.getPosition();
-						}
-	
-					}		
+		} else {
+			List<Edge<String>> aristas = mapaCiudades.getEdges(origen);
+			Iterator<Edge<String>> it = aristas.iterator(); //Las aristas nunca estan null, al crearlas se olbiga a inicalizarla si el vertice la tiene null.
+			while(it.hasNext()&&camino.isEmpty()) {
+				Vertex<String> v = it.next().getTarget();
+				if(!marca[v.getPosition()]&&!ciudades.contains(v.getData())) {
+					dfsModificadoInc2(v,destino,marca,camino,temp,ciudades);
 				}
-				q.enqueue(mapaCiudades.getVertex(buscarMenorDesco(pesos,marca)));
 			}
+			temp.remove(origen.getData());
+			marca[origen.getPosition()] = false;
 		}
-			//Armar camino minimo con la tabla ... ?
-		
-		return lista;
 	}
 	
-	private int buscarMenorDesco(int[] pesos, boolean[] marca) {
-		int pos = 0;
-		int min = numGrande;
-		for(int i=0; i<pesos.length; i++) {
-			if(pesos[i]<min&&!marca[i]) {
-				pos = i;
-				min = pesos[i];
+	// Ej3.inc3		
+	// sin peso	
+	public List<String> caminoMasCorto(String ciudad1, String ciudad2){
+		List<String> camino = new LinkedList<String>();
+		if(mapaCiudades!=null) {
+			boolean[] marcas = new boolean[mapaCiudades.getSize()];
+			Integer distancia = 0;
+			List<String> temp = new LinkedList<String>();
+			Vertex<String> origen = mapaCiudades.search(ciudad1);
+			Vertex<String> destino = mapaCiudades.search(ciudad2);
+			if(origen!=null&&destino!=null) {
+				dfsModificadoCaminoCorto(origen,destino,marcas,camino,temp,distancia);
 			}
 		}
-		return pos;
-	}                          
-	
-	// sin usar Dijkstra
-	
-	public List<String> caminoMasCorto2(String ciudad1, String ciudad2){
-		List<String> camino = new LinkedList<String>();
-		List<String> temp = new LinkedList<String>();
-		boolean[] marca = new boolean[this.mapaCiudades.getSize()];
-		Vertex<String> origen = mapaCiudades.search(ciudad1);
-		Vertex<String> destino = mapaCiudades.search(ciudad2);
-		int distancia = 0;
-		int min = numGrande;
-		if(origen!=null&&destino!=null) {
-			marca[origen.getPosition()]=true;
-			temp.add(origen.getData());
-			dfsModificadoCaminoCorto(origen.getPosition(),temp,camino,marca,ciudad2,min,distancia);
+		return camino;
+	}
+
+	private void dfsModificadoCaminoCorto(Vertex<String> origen, Vertex<String> destino, boolean[] marcas, List<String> camino, List<String> temp, Integer distancia) {
+		temp.add(origen.getData());
+		marcas[origen.getPosition()] = true;
+		/*
+		System.out.print("distancia "+distancia+" ");
+		System.out.print("origen == dest "+(origen==destino)+" || ");
+		System.out.println("camino size: "+camino.size());
+		*/
+		if(origen == destino) {
+			if(camino.isEmpty()) {
+				camino.addAll(temp);
+				//System.out.println("camino size primero: "+camino.size());
+			}
+			else if(distancia<camino.size()-1) {
+				camino.removeAll(camino);
+				camino.addAll(temp);
+				//System.out.println("camino size despues: "+camino.size());
+			}
+		} else {
+			List<Edge<String>> aristas = mapaCiudades.getEdges(origen);
+			Iterator<Edge<String>> it = aristas.iterator();
+			distancia++;
+			while(it.hasNext()) {
+				Vertex<String> v = it.next().getTarget();
+				if(!marcas[v.getPosition()]) {
+					dfsModificadoCaminoCorto(v,destino,marcas,camino,temp,distancia);
+				}
+			}
+			distancia--;
+		}
+		/*
+		for(String i: temp) {
+			System.out.print(i);
 		}
 		
+		System.out.println("");
+		System.out.println("-------");
+		*/
+		marcas[origen.getPosition()] = false;
+		temp.remove(origen.getData());
+	}
+	
+	// con peso y metodo void
+	public List<String> caminoMasCortoConPeso(String ciudad1, String ciudad2){
+		List<String> camino = new LinkedList<String>();
+		if(mapaCiudades!=null) {
+			boolean[] marcas = new boolean[mapaCiudades.getSize()];
+			int[] minimo = new int[1]; minimo[0] = 9999;
+			int[] distancia = new int[1]; distancia[0] = 0;
+			List<String> temp = new LinkedList<String>();
+			Vertex<String> origen = mapaCiudades.search(ciudad1);
+			Vertex<String> destino = mapaCiudades.search(ciudad2);
+			if(origen!=null&&destino!=null) {
+				dfsModificadoCaminoMasCorto2(origen,destino,marcas,camino,temp,distancia,minimo);
+			}
+		}
 		return camino;
 	}
 	
-	private void dfsModificadoCaminoCorto(int pos, List<String> temp, List<String> camino, boolean[] marca, String ciudad2, int minimo, int distancia) {
-		Vertex<String> v = this.mapaCiudades.getVertex(pos);
-		if(v.getData().equals(ciudad2)) {
-			if(distancia<minimo) {
-				camino = new LinkedList<String>(temp);
-				minimo = distancia;
-			}
-			return;
+	private void dfsModificadoCaminoMasCorto2(Vertex<String> origen, Vertex<String> destino, boolean[] marcas, List<String> camino, List<String> temp, int[] distancia, int[] minimo) {
+		marcas[origen.getPosition()] = true;
+		temp.add(origen.getData());
+		/*
+		for(String i: temp) {
+			System.out.print(i);
 		}
-		List<Edge<String>> aristas = mapaCiudades.getEdges(v);
-		Iterator<Edge<String>> it = aristas.iterator();
-		while(it.hasNext()) {
-			Vertex<String> u = it.next().getTarget();
-			int j = u.getPosition();
-			if(!marca[j]) {
-				temp.add(u.getData());
-				distancia++;
-				marca[j]=true;
-				dfsModificadoCaminoCorto(j,temp,camino,marca,ciudad2,minimo,distancia);
-				temp.remove(u.getData());  //acondiciono lista y distancia para evaluar otros caminos en los demas vertices.
-				distancia--;
-				marca[j]=false;
-				}
+		
+		System.out.println("-----------");
+		*/
+		if(origen == destino) {
+			if(distancia[0]<minimo[0]) {
+				camino.removeAll(camino);
+				camino.addAll(temp);
+				minimo[0] = distancia[0];
 			}
+		} else {
+			//System.out.println("entre");
+			List<Edge<String>> aristas = mapaCiudades.getEdges(origen);
+			Iterator<Edge<String>> it = aristas.iterator();
+			while(it.hasNext()&&distancia[0]<minimo[0]) {
+				//System.out.println("while");
+				Edge<String> e = it.next();
+				Vertex<String> v = e.getTarget();
+				distancia[0] += e.getWeight();
+				if(!marcas[v.getPosition()]&&distancia[0]<minimo[0]) {
+					dfsModificadoCaminoMasCorto2(v,destino,marcas,camino,temp,distancia,minimo);
+					//System.out.println("distancia: "+distancia[0]);
+				}
+				distancia[0] -= e.getWeight();
+			}
+		}
+		temp.remove(origen.getData());
+		marcas[origen.getPosition()] = false;
 	}
 	
 	
@@ -210,88 +248,83 @@ public class Mapa<String> {
 		boolean[] marca = new boolean[this.mapaCiudades.getSize()];
 		Vertex<String> origen = mapaCiudades.search(ciudad1);
 		Vertex<String> destino = mapaCiudades.search(ciudad2);
+		Trayectos<String> min = new Trayectos<String>(camino, 9999);
+		Trayectos<String> actual = new Trayectos<String>(temp, 0);
 		if(origen!=null&&destino!=null) {
-			marca[origen.getPosition()]=true;
-			temp.add(origen.getData());
-			dfsModificadoCombustible(origen.getPosition(),temp,camino,marca,ciudad2,tanque);
+			dfsModificadoCombustible(origen,destino,marca,min,actual,tanque);
 		}
 		return camino;
 	}
 	
-	private void dfsModificadoCombustible(int pos, List<String> temp, List<String> camino, boolean[] marca, String ciudad2, int tanque) {
-		Vertex<String> v = mapaCiudades.getVertex(pos);
-		if(v.getData().equals(ciudad2)) {
-			camino.addAll(temp);
-			return;
-		} 
-		List<Edge<String>> aristas = mapaCiudades.getEdges(v);
-		Iterator<Edge<String>> it = aristas.iterator();
-		while(it.hasNext()&&camino.isEmpty()) {
-			Vertex<String> u = it.next().getTarget();
-			int j = u.getPosition();
-			if(!marca[j]) {
-				tanque-=it.next().getWeight();
-				if(tanque>0) {
-					marca[j]=true;
-					temp.add(u.getData());
-					dfsModificadoCombustible(j,temp,camino,marca,ciudad2,tanque);
-					marca[j]=false;
-					temp.remove(u.getData());
-				}	
-				tanque+=it.next().getWeight();
+	private void dfsModificadoCombustible(Vertex<String> origen, Vertex<String> destino, boolean[] marca, Trayectos<String> min, Trayectos<String> actual, int tanque) {
+		marca[origen.getPosition()] = true;
+		actual.getLista().add(origen.getData());
+		if(origen == destino) {
+			min.getLista().addAll(actual.getLista());
+		} else {
+			List<Edge<String>> aristas = mapaCiudades.getEdges(origen);
+			Iterator<Edge<String>> it = aristas.iterator();
+			while(it.hasNext()&&min.getLista().isEmpty()) {
+				Edge<String> e = it.next();
+				Vertex<String> v = e.getTarget();
+				if(!marca[v.getPosition()]) {
+					tanque -= e.getWeight();
+					if(tanque>=0) {
+						dfsModificadoCombustible(v,destino,marca,min,actual,tanque);
+					}
+					tanque += e.getWeight();
+				}
 			}
-		}
-		
+		}	
+		marca[origen.getPosition()] = false;
+		actual.getLista().remove(origen.getData());
 	}
 	
 	// Ej3.inc5
 	
 	public List<String> caminoMenorCargaCombustible(String ciudad1, String ciudad2, int tanque){
-		List<String> camino = new LinkedList<String>();
-		int minimo = numGrande;
-		int cargas = 0;
-		int recarga = tanque;
-		List<String> temp = new LinkedList<String>();
+		List<String> camino = new ArrayList<String>();
+		List<String> temp = new ArrayList<String>();
 		boolean[] marca = new boolean[this.mapaCiudades.getSize()];
 		Vertex<String> origen = mapaCiudades.search(ciudad1);
 		Vertex<String> destino = mapaCiudades.search(ciudad2);
-		if(origen!=null&&destino!=null&&origen!=destino) {
-            int pos = origen.getPosition();
-			marca[pos]=true;
-			temp.add(origen.getData());
-			dfsModificadoMenorCarga(pos,temp,camino,marca,ciudad2,tanque,recarga,cargas,minimo);
+		Trayectos<String> min = new Trayectos<String>(camino, 9999);
+		Trayectos<String> actual = new Trayectos<String>(temp, 0);
+		if(origen!=null&&destino!=null) {
+			dfsModificadoMenorCargaCombustible(origen,destino,marca,min,actual,tanque,tanque,0);
 		}
 		return camino;
 	}
 	
-	private void dfsModificadoMenorCarga(int pos, List<String> temp, List<String> camino, boolean[] marca, String ciudad2, int tanque, int recarga, int cargas, int minimo) {
-		// marca[pos]=true; no marco aca porque necesito tener el vertice de ciudad2 no marcado, para evaluar los distintos caminos.
-		Vertex<String> v = mapaCiudades.getVertex(pos);
-		// temp.add(v.getData()); no se puede agregar aca xq no se en esta instancia si llego a v.
-		if(v.getData().equals(ciudad2)) {
-			if(cargas<minimo) {
-				camino = new LinkedList<String>(temp);
-				minimo = cargas;
+	private void dfsModificadoMenorCargaCombustible(Vertex<String> origen, Vertex<String> destino, boolean[] marca, Trayectos<String> min, Trayectos<String> actual, int tanque, int recarga, int cant) {
+		marca[origen.getPosition()] = true;
+		actual.getLista().add(origen.getData());
+		if(origen == destino) {
+			if(cant<min.getPeso()) {
+				min.getLista().clear();
+				min.getLista().addAll(actual.getLista());
+				min.setPeso(cant);
 			}
-            return;
-		} 	
-		List<Edge<String>> aristas = mapaCiudades.getEdges(v);
-		for(Edge<String> arista: aristas) {
-			Vertex<String> u = arista.getTarget();
-            int j = u.getPosition();
-			if(!marca[j]) {
-                tanque-=arista.getWeight();
-				if(tanque<0) {
-					cargas++;
-                    tanque = recarga;
+		} else {
+			List<Edge<String>> aristas = mapaCiudades.getEdges(origen);
+			Iterator<Edge<String>> it = aristas.iterator();
+			while(it.hasNext()&&actual.getPeso()<min.getPeso()) {
+				Edge<String> e = it.next();
+				Vertex<String> v = e.getTarget();
+				if(!marca[v.getPosition()]) {
+					tanque -= e.getWeight();
+					if(tanque<0) {
+						cant++;
+						dfsModificadoMenorCargaCombustible(v,destino,marca,min,actual,recarga,recarga,cant);
+						cant--;
+					} else {
+						dfsModificadoMenorCargaCombustible(v,destino,marca,min,actual,tanque,recarga,cant);
+					}
+					tanque += e.getWeight();
 				}
-                marca[j]=true;
-                temp.add(u.getData());
-                dfsModificadoMenorCarga(j,temp,camino,marca,ciudad2,tanque,recarga,cargas,minimo);
-                temp.remove(u.getData());
-                marca[j]=false;
-				tanque+=arista.getWeight(); 
 			}
-		}
+		}	
+		marca[origen.getPosition()] = false;
+		actual.getLista().remove(origen.getData());
 	}
 }
