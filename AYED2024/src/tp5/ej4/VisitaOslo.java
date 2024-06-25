@@ -10,43 +10,38 @@ import tp5.ej1.Vertex;
 
 public class VisitaOslo {
 
-    public List<String> paseoEnBici(Graph<String> grafo, String destino, int maxTiempo, List<String> restringidos){
+    public static List<String> paseoEnBici(Graph<String> grafo, String destino, int maxTiempo, List<String> restringidos){
         List<String> camino = new LinkedList<String>();
         List<String> temp = new LinkedList<String>();
-        Vertex<String> origen = grafo.search("Ayuntamiento");
+        Vertex<String> origen = grafo.search("Ciudad0");
         Vertex<String> destino1 = grafo.search(destino);
         boolean[] marca = new boolean[grafo.getSize()];
         if(origen!=null&&destino1!=null){
-            int j = origen.getPosition();
-            marca[j] = true;
-            int tiempo = maxTiempo;
-            temp.add(origen.getData());
-            dfs(j,grafo,temp,camino,destino,tiempo,marca,restringidos);
+           dfs(grafo,origen,destino1,marca,temp,camino,restringidos,maxTiempo);
         }
         return camino;
     }
 
-    private void dfs(int j, Graph<String> grafo, List<String> temp, List<String> camino, String destino, int tiempo, boolean[] marca, List<String> restringidos){
-        Vertex<String> v = grafo.getVertex(j);
-        if(v.getData().equals(destino)){
-            camino.addAll(temp);
-            return;
-            }
-        List<Edge<String>> aristas = grafo.getEdges(v);
-        Iterator<Edge<String>> it = aristas.iterator();
-        while(it.hasNext()&&camino.isEmpty()){
-            Vertex<String> u = it.next().getTarget();
-            int j1 = u.getPosition();
-            tiempo-=it.next().getWeight();
-            if(!marca[j1]&&tiempo>=0&&!restringidos.contains(u.getData())){
-                marca[j1] = true;
-                temp.add(u.getData());
-                dfs(j1,grafo,temp,camino,destino,tiempo,marca,restringidos);
-                marca[j1]=false;
-                temp.remove(u.getData());
-            }
-            tiempo+=it.next().getWeight();
-        }
+    private static void dfs(Graph<String> grafo, Vertex<String> origen, Vertex<String> destino, boolean[] marca, List<String> temp, List<String> camino, List<String> restringidos, int tiempo){
+    	marca[origen.getPosition()] = true;
+    	temp.add(origen.getData());
+    	if(origen == destino) {
+    		camino.addAll(temp);
+    	} else {
+	    	List<Edge<String>> aristas = grafo.getEdges(origen);
+	        Iterator<Edge<String>> it = aristas.iterator();
+	        while(it.hasNext()&&camino.isEmpty()){
+	        	Edge<String> e = it.next();
+	            Vertex<String> u = e.getTarget();
+	            tiempo-=e.getWeight();
+	            if(!marca[u.getPosition()]&&tiempo>=0&&!restringidos.contains(u.getData())){
+	                dfs(grafo,u,destino,marca,temp,camino,restringidos,tiempo);
+	            }
+	            tiempo+=e.getWeight();
+	        }
+    	}
+    	marca[origen.getPosition()] = false;
+    	temp.remove(origen.getData());
     }
 	
 }

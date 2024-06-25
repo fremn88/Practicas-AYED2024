@@ -315,7 +315,7 @@ public class Mapa<String> {
 					tanque -= e.getWeight();
 					if(tanque<0) {
 						cant++;
-						dfsModificadoMenorCargaCombustible(v,destino,marca,min,actual,recarga,recarga,cant);
+						dfsModificadoMenorCargaCombustible(v,destino,marca,min,actual,recarga-e.getWeight(),recarga,cant);
 						cant--;
 					} else {
 						dfsModificadoMenorCargaCombustible(v,destino,marca,min,actual,tanque,recarga,cant);
