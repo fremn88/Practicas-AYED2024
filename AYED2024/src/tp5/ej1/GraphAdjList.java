@@ -7,6 +7,10 @@ public class GraphAdjList<T> implements Graph<T> {
 	
 	private List<VertexAdjList<T>> vertices;
 
+	public void setVertices(List<VertexAdjList<T>> vertices) {
+		this.vertices = vertices;
+	}
+	
 	@Override
 	public Vertex<T> createVertex(T data) {
 		// TODO Auto-generated method stub

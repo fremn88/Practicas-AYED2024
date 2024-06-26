@@ -31,12 +31,15 @@ public class Persona {
 		this.domicilio = domicilio;
 	}
 	public boolean equals(Persona p) {
-		return this.nombre == p.nombre && this.esEmpleado == p.esEmpleado;
+		return this.nombre == p.nombre;
 	}
 	public boolean getCobro() {
 		return cobro;
 	}
 	public void setCobro(boolean cobro) {
 		this.cobro = cobro;
+	}
+	public String toString() {
+		return this.nombre;
 	}
 }
