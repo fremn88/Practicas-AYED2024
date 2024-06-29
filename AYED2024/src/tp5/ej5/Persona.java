@@ -30,8 +30,8 @@ public class Persona {
 	public void setDomicilio(String domicilio) {
 		this.domicilio = domicilio;
 	}
-	public boolean equals(Persona p) {
-		return this.nombre == p.nombre;
+	public boolean equals(Object p) {
+		return this.nombre == ((Persona)p).nombre;
 	}
 	public boolean getCobro() {
 		return cobro;

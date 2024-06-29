@@ -30,12 +30,14 @@ public class QuedateEnCasa {
             }
             List<Edge<Persona>> aristas = grafo.getEdges(persona);
             Iterator<Edge<Persona>> it = aristas.iterator();
-            while(it.hasNext()&&resultado.size()<40&&grado>0){
-                Edge<Persona> e = it.next();	
-                Vertex<Persona> v = e.getTarget();
-                if(!marca[v.getPosition()]){
-                    dfs(v,grafo,grado-1,marca,resultado);
-                }
+            if(grado>0) {
+	            while(it.hasNext()&&resultado.size()<40){
+	                Edge<Persona> e = it.next();	
+	                Vertex<Persona> v = e.getTarget();
+	                if(!marca[v.getPosition()]){
+	                    dfs(v,grafo,grado-1,marca,resultado);
+	                }
+	            }
             }
         }
     }

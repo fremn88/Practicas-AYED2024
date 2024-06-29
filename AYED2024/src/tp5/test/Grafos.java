@@ -1,7 +1,9 @@
 package tp5.test;
 
+import java.util.LinkedList;
 import java.util.List;
 
+import parcial2024GrafosF1.Recinto;
 import tp5.ej1.Edge;
 import tp5.ej1.GraphAdjList;
 import tp5.ej1.VertexAdjList;
@@ -48,7 +50,8 @@ public class Grafos {
 		for(String i: lis) {
 			System.out.println(i);
 		}
-		
+		List<Recinto> camino = new LinkedList<Recinto>();
+		System.out.println(camino.size());
 		
 	}
 
